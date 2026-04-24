@@ -46,7 +46,7 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
         crearMedico(medico);
 
         //Obtenemos medico y comprobamos que se ha guardado
-        mockMvc.perform(get("/medico" + medico.getId()))
+        mockMvc.perform(get("/medico/" + medico.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value(medico.getNombre()))
                 .andExpect(jsonPath("$.dni").value(medico.getDni()));
@@ -60,12 +60,12 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
                 .andExpect(status().isNoContent());
 
         //Verificamos la actualización
-        mockMvc.perform(get("/medico" + medico.getId()))
+        mockMvc.perform(get("/medico/" + medico.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.especialidad").value("Ginecologia"));
 
         //Eliminamos al medico creado
-        mockMvc.perform(delete("/medico" + medico.getId()))
+        mockMvc.perform(delete("/medico/" + medico.getId()))
                 .andExpect(status().isOk());
     }
 
