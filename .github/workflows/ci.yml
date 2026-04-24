@@ -57,12 +57,13 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Resultados de Pruebas de Integración
-          path: target/failsafe-reports/*.xml
+          path: target/failsafe-reports/TEST-*.xml
           reporter: java-junit
 
       # 10. Procesar cobertura con Jacoco
       - name: Generar Jacoco Badge
         id: jacoco
+        if: always()
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
@@ -78,6 +79,7 @@ jobs:
 
       # 12. Hacer commit de las imágenes SVG al repositorio
       - name: Guardar los badges en GitHub
+        if: always()
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Auto-actualización de los badges de Jacoco"
