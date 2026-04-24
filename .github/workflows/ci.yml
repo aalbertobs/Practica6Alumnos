@@ -59,3 +59,19 @@ jobs:
           name: Resultados de Pruebas de Integración
           path: target/failsafe-reports/*.xml
           reporter: java-junit
+
+      # 10. Procesar cobertura con Jacoco
+      - name: Generar Jacoco Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+
+      # 11. Subir el reporte de Jacoco (opcional pero recomendado)
+      - name: Guardar reporte de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/

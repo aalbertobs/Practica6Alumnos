@@ -2,6 +2,8 @@
 
 > ⚠️ Replace `<YOUR_USER>` and `<YOUR_REPO>` with your actual GitHub account details.
 > ![Estado del CI](https://github.com/aalbertobs/Practica6Alumnos/actions/workflows/ci.yml/badge.svg?branch=main)
+> ![Coverage](.github/badges/jacoco.svg)
+> ![Branches](.github/badges/branches.svg)
 
 A Spring Boot REST API that models a small medical records system. Built as a practice project for the **Software Maintenance and Testing** course at the University of Málaga.
 
