@@ -1,0 +1,12 @@
+2026-04-24 11:13:27.713703+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "MEDICOS" no encontrada
+Table "MEDICOS" not found; SQL statement:
+SELECT * FROM MEDICOS [42102-224]
+2026-04-24 11:29:19.520970+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "MEDICOSMEDICO" no encontrada
+Table "MEDICOSMEDICO" not found; SQL statement:
+SELECT * FROM MEDICOSMEDICO [42102-224]
+2026-04-24 11:29:26.789083+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "MEDICOS" no encontrada
+Table "MEDICOS" not found; SQL statement:
+SELECT * FROM MEDICOS [42102-224]
