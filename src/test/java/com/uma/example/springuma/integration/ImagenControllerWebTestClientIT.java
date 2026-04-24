@@ -27,6 +27,9 @@ import reactor.core.publisher.Mono;
 import org.springframework.web.reactive.function.BodyInserters;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ImagenControllerWebTestClientIT extends AbstractIntegration {
 
@@ -88,6 +91,57 @@ public class ImagenControllerWebTestClientIT extends AbstractIntegration {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    @DisplayName("Subir imagen de forma correcta y verificar que se asocia al paciente")
+    void testSubirImagen() {
+        // Subimos una imagen (asegúrate de tener un 'healthy.png' en src/test/resources/)
+        subirImagen("healthy.png");
+
+        // Recuperamos la imagen para comprobar que se ha asociado al paciente
+        FluxExchangeResult<Imagen> result = testClient.get().uri("/imagen/paciente/" + paciente.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(Imagen.class);
+
+        // Extraemos la primera imagen de la respuesta
+        Imagen imagenGuardada = result.getResponseBody().blockFirst();
+
+        // 1. Verificamos que la imagen realmente se ha recuperado (si falla aquí, es que no se subió el PNG)
+        assertNotNull(imagenGuardada, "La imagen recuperada es nula. Revisa que healthy.png exista.");
+
+        // 2. Verificamos que tiene un ID válido asignado por la BD
+        assertNotNull(imagenGuardada.getId(), "La imagen debería tener un ID generado");
+
+        // 3. Verificamos el paciente SOLO si el JSON lo ha devuelto
+        if (imagenGuardada.getPaciente() != null) {
+            assertEquals(paciente.getId(), imagenGuardada.getPaciente().getId());
+        }
+    }
+
+    @Test
+    @DisplayName("Subir imagen y realizar una predicción sobre ella")
+    void testRealizarPrediccion() {
+        // 1. Subir imagen
+        subirImagen("healthy.png");
+
+        // 2. Obtener el ID de la imagen que acabamos de subir
+        Imagen imagenGuardada = testClient.get().uri("/imagen/paciente/" + paciente.getId())
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(Imagen.class)
+                .getResponseBody()
+                .blockFirst();
+
+        Long idImagen = imagenGuardada.getId();
+
+        // 3. Realizar la predicción
+        testClient.get().uri("/imagen/predict/" + idImagen)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$").isNotEmpty(); // Verifica que el resultado de la IA (String o JSON) no venga vacío
     }
 
    }

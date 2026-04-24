@@ -75,11 +75,35 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration {
     @Test
     @DisplayName("Crear paciente y recuperarlo por ID pasado por parametro")
     void savePaciente_RecuperaPacientePorId() throws Exception {
+        // Es necesario crear el médico primero por la relación de la BD
         crearMedico(medico);
         crearPaciente(paciente);
 
-        //Obtener paciente por ID
-        
+        // Obtener paciente por ID y verificar asociación con el médico
+        getPacienteById(paciente.getId(), paciente);
+    }
+
+    @Test
+    @DisplayName("Editar datos de un paciente asociado a un médico")
+    void actualizarPaciente() throws Exception {
+        crearMedico(medico);
+        crearPaciente(paciente);
+
+        // Modificamos datos del paciente
+        paciente.setEdad(25);
+        paciente.setCita("Oncologia General");
+
+        mockMvc.perform(put("/paciente")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(paciente)))
+                .andExpect(status().isNoContent());
+
+        // Verificamos que se guardaron los cambios manteniendo el médico
+        mockMvc.perform(get("/paciente/" + paciente.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.edad").value(25))
+                .andExpect(jsonPath("$.cita").value("Oncologia General"))
+                .andExpect(jsonPath("$.medico.nombre").value("Miguel"));
     }
 
 }
