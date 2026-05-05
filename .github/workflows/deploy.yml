@@ -15,5 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+        # ESTO INSTALA HELM EN EL MOMENTO
+      - name: Set up Helm
+        uses: azure/setup-helm@v4.2.0
+
       - name: Upgrade Helm Chart
-        run: ./helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest --namespace default
+        run: helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest --namespace default
