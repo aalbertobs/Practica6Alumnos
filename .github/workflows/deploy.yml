@@ -1,0 +1,21 @@
+name: Deploy to Local Kubernetes
+
+on:
+  workflow_run:
+    workflows: ["Docker Build & Push on Github"] # Se lanza cuando el anterior acaba
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted # Esto le dice que use TU ordenador
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update Helm Chart
+        run: |
+          # Usamos el helm.exe que tienes en la carpeta
+          .\helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest
