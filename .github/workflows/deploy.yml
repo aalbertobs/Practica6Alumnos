@@ -16,4 +16,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Upgrade Helm Chart
-        run: helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest --namespace default
+        run: ./helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest --namespace default
