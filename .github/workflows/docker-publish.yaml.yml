@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  # Forzamos el nombre que te funcionó en local para no liarnos.
+  # Forzamos el nombre que te funcionó en local para no liarnos
   IMAGE_NAME: albertobs/springuma
 
 jobs:
