@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update Helm Chart
-        run: |
-          # Usamos el helm.exe que tienes en la carpeta
-          .\helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest
+      - name: Upgrade Helm Chart
+          run: |
+            # Intentamos usar el helm del sistema en lugar del archivo local
+            helm upgrade --install mi-hospital ./springuma-chart --set image.tag=latest --namespace default
